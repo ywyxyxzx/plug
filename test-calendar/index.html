@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #calendar {
+  font-size: 12px;
+  width: 100%;
+  margin: 0 auto;
+  background: #ecf6ff;
+}
+.month {
+  width: 100%;
+  color: #333333;
+}
+.month ul {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  height: 35px;
+}
+.year-month {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+.choose-month {
+  text-align: center;
+  font-size: 12px;
+}
+.arrow {
+  padding: 15px;
+  color: #999999;
+}
+ 
+.month ul li {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+.weekdays {
+  margin: 0;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  color: #999;
+  justify-content: space-around;
+}
+.weekdays li {
+  display: inline-block;
+  width: 13.6%;
+  text-align: center;
+}
+.days {
+  padding: 10px;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+.days li {
+  list-style-type: none;
+  display: inline-block;
+  width: 14.2%;
+  text-align: center;
+  padding-bottom: 4px;
+  padding-top: 10px;
+  font-size: 12px;
+  color: #000;
+}
+.days li .active {
+  padding: 6px 10px;
+  border-radius: 50%;
+  background: #00b8ec;
+  color: #fff;
+}
+.days li .other-month {
+  padding: 5px;
+  color: gainsboro;
+}
+.days li:hover > span > span {
+  padding: 6px 10px;
+  border-radius: 50%;
+  background: #00b8ec;
+  color: #fff;
+  cursor: pointer;
+}
+
+————————————————
+版权声明：本文为CSDN博主「qwyio」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/qwyio/article/details/124824645
+</style>
+<body>
+    <!-- start -->
+    <div id="my_calender">
+
+        <template>
+            <div id="calendar">
+              <!-- 年份 月份 -->
+              <div class="month">
+                <ul>
+                  <!--点击会触发pickpre函数，重新刷新当前日期 @click(vue v-on:click缩写) -->
+                  <li
+                    class="arrow hands el-icon-arrow-left"
+                    @click="pickPre(currentYear, currentMonth)" 
+                  ><</li>
+                  <li class="year-month">
+                    <span class="choose-year">{{ currentYear }}年</span>
+                    <span class="choose-month">{{ currentMonth }}月</span>
+                  </li>
+                  <li
+                    class="arrow hands el-icon-arrow-right"
+                    @click="pickNext(currentYear, currentMonth)"
+                  >></li>
+                </ul>
+              </div>
+              <!-- 星期 -->
+              <ul class="weekdays">
+                <li>日</li>
+                <li>一</li>
+                <li>二</li>
+                <li>三</li>
+                <li>四</li>
+                <li>五</li>
+                <li>六</li>
+              </ul>
+              <!-- 日期 -->
+              <ul class="days">
+                <!-- 核心 v-for循环 每一次循环用<li>标签创建一天 -->
+                <li v-for="(dayobject, i) in days" :key="i">
+                  <!--本月-->
+                  <!--如果不是本月  改变类名加灰色-->
+                  <span
+                    v-if="dayobject.day.getMonth() + 1 != currentMonth"
+                    class="other-month"
+                    @click="getDayTime(dayobject.day)"
+                  >
+                    {{ dayobject.day.getDate() }}
+                  </span>
+                  <!--如果是本月  还需要判断是不是这一天-->
+                  <span v-else>
+                    <!--今天  同年同月同日-->
+                    <span
+                      v-if="
+                        dayobject.day.getFullYear() == new Date().getFullYear() &&
+                        dayobject.day.getMonth() == new Date().getMonth() &&
+                        dayobject.day.getDate() == new Date().getDate()
+                      "
+                      :class="newDate == newsss ? 'active' : ''"
+                      @click="getDayTime(dayobject.day, i)"
+                    >
+                      {{ dayobject.day.getDate() }}
+                    </span>
+                    <span
+                      v-else
+                      @click="getDayTime(dayobject.day, i)"
+                      :class="newDate == dayobject.day ? 'active' : ''"
+                    >
+                      {{ dayobject.day.getDate() }}
+                    </span>
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </template>
+    </div>
+    <!-- end -->
+</body>
+<script src="./moment.js"></script>
+<script src="./vue.js"></script>
+
+<script src="./index.js"></script>
+
+</html>
